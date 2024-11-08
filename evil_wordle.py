@@ -197,7 +197,7 @@ class WordFamily:
             return len(self.words) > len(other.words)
         if self.difficulty != other.difficulty:
             return self.difficulty < other.difficulty
-        return tuple(self.feedback_colors) < tuple(other.feedback_colors)
+        return self.feedback_colors < other.feedback_colors
 
     # DO NOT change this method.
     # You should use this for debugging!
@@ -415,10 +415,9 @@ def get_feedback(remaining_secret_words, guessed_word):
         family[feedback].append(i)
     
     hard = None
-    hardest_word = []
     max_size = 0
     min_dif = float('inf')
-    dif = sum(WordFamily.COLOR_DIFFICULTY[color] for color in feedback)
+    chosen_feedback = None
 
     for feedback, words in family.items():
         size = len(words)
@@ -431,13 +430,13 @@ def get_feedback(remaining_secret_words, guessed_word):
     
         if (size > max_size or (size == max_size and dif < min_dif) or 
             (size == max_size and dif == min_dif and feedback < hard)):
-            hard = feedback
-            hardest_word = words
+            hard = words
             max_size = size
             min_dif = dif
-    feedback_colors = list(hard)
+            chosen_feedback = feedback
 
-    return feedback_colors, hardest_word
+    feedback_colors = list(chosen_feedback)
+    return feedback_colors, hard
 
 
 # DO NOT modify this function.
