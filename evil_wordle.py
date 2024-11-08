@@ -124,6 +124,12 @@ class Keyboard:
         new_list = []
         for i in range(len(self.rows)):
             row = self.rows[i]
+            if i == 0:
+                form_row = ''
+            elif i == 1:
+                form_row = ' '
+            else: 
+                form_row = '  '
             form_row = ' ' * 1
             form_row +=  ' '.join(color_word(self.colors[let], let) for let in row)
             new_list.append(form_row.strip())
@@ -166,7 +172,6 @@ class WordFamily:
         for col in feedback_colors:
             self.difficulty += self.COLOR_DIFFICULTY[col]
 
-    # TODO: Modify this method. You may delete this comment when you are done.
     def __lt__(self, other):
         """
         Compares this WordFamily object with another by prioritizing a larger
@@ -189,10 +194,10 @@ class WordFamily:
         """
         if not isinstance(other, WordFamily):
             raise NotImplementedError("< operator only valid for WordFamily comparisons.")
-        if self.difficulty != other.difficulty:
-            return self.difficulty < other.difficulty
         if len(self.words) != len(other.words):
             return len(self.words) < len(other.words)
+        if self.difficulty != other.difficulty:
+            return self.difficulty < other.difficulty
         return tuple(self.feedback_colors) < tuple(other.feedback_colors)
 
     # DO NOT change this method.
@@ -345,9 +350,9 @@ def fast_sort(lst):
             new_list.append(left.pop(0))
         else:
             new_list.append(right.pop(0))
-    
-    new_list.extend(right)
+
     new_list.extend(left)
+    new_list.extend(right)
     return new_list
 
 def get_feedback_colors(secret_word, guessed_word):
@@ -366,7 +371,7 @@ def get_feedback_colors(secret_word, guessed_word):
           - Letters not in secret_word are marked with NOT_IN_WORD_COLOR. The list will be of
             length 5 with the ANSI coloring in each index as the returned value.
     """
-    feedback = [None] * NUM_LETTERS
+    feedback = [NOT_IN_WORD_COLOR] * NUM_LETTERS
     secret_list = list(secret_word)
     for i in range(NUM_LETTERS):
         if guessed_word[i] == secret_word[i]:
