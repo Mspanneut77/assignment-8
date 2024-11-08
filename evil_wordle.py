@@ -94,9 +94,9 @@ class Keyboard:
 
             if color == CORRECT_COLOR:
                 self.colors[i] = CORRECT_COLOR
-            elif color == WRONG_SPOT_COLOR and self.color[i] != CORRECT_COLOR:
+            elif color == WRONG_SPOT_COLOR and self.colors[i] != CORRECT_COLOR:
                 self.colors[i] = WRONG_SPOT_COLOR
-            elif color == NOT_IN_WORD_COLOR and self.color[i] == NO_COLOR:
+            elif color == NOT_IN_WORD_COLOR and self.colors[i] == NO_COLOR:
                 self.colors[i] = NOT_IN_WORD_COLOR
 
     def __str__(self):
