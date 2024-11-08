@@ -418,11 +418,11 @@ def get_feedback(remaining_secret_words, guessed_word):
     hardest_word = []
     max_size = 0
     min_dif = float('inf')
-    dif = 0
+    dif = sum(WordFamily.COLOR_DIFFICULTY[color] for color in feedback)
 
     for feedback, words in family.items():
         size = len(words)
-        dif = 0
+        dif = sum(WordFamily.COLOR_DIFFICULTY[color] for color in feedback)
         for color in feedback:
             if color == WRONG_SPOT_COLOR:
                 dif += 1
