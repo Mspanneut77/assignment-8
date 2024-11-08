@@ -93,11 +93,11 @@ class Keyboard:
             color = feedback_colors[j]
 
             if color == CORRECT_COLOR:
-                self.color[i] = CORRECT_COLOR
+                self.colors[i] = CORRECT_COLOR
             elif color == WRONG_SPOT_COLOR and self.color[i] != CORRECT_COLOR:
-                self.color[i] = WRONG_SPOT_COLOR
+                self.colors[i] = WRONG_SPOT_COLOR
             elif color == NOT_IN_WORD_COLOR and self.color[i] == NO_COLOR:
-                self.color[i] = NOT_IN_WORD_COLOR
+                self.colors[i] = NOT_IN_WORD_COLOR
 
     def __str__(self):
         """
@@ -124,7 +124,7 @@ class Keyboard:
         new_list = []
         for i in range(len(self.rows)):
             row = self.rows[i]
-            form_row = ''
+            form_row = ' ' * 1
             if i == 1:
                 form_row += ' '
             elif i == 2:
