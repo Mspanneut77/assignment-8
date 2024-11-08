@@ -125,13 +125,7 @@ class Keyboard:
         for i in range(len(self.rows)):
             row = self.rows[i]
             form_row = ' ' * 1
-            if i == 1:
-                form_row += ' '
-            elif i == 2:
-                form_row += '  '
-
-            for let in row:
-                form_row += color_word(self.colors[let], let)
+            form_row +=  ' '.join(color_word(self.colors[let], let) for let in row)
             new_list.append(form_row.strip())
         return '\n'.join(new_list)
 
@@ -199,6 +193,7 @@ class WordFamily:
             return self.difficulty < other.difficulty
         if len(self.words) != len(other.words):
             return len(self.words) < len(other.words)
+        return tuple(self.feedback_colors) < tuple(other.feedback_colors)
 
     # DO NOT change this method.
     # You should use this for debugging!
@@ -341,8 +336,8 @@ def fast_sort(lst):
         return lst[:]
     
     mid = len(lst) // 2
-    right = fast_sort(lst[:mid])
-    left = fast_sort(lst[mid:])
+    right = fast_sort(lst[mid:])
+    left = fast_sort(lst[:mid])
 
     new_list = []
     while right and left:
@@ -355,7 +350,6 @@ def fast_sort(lst):
     new_list.extend(left)
     return new_list
 
-# TODO: Modify this helper function. You may delete this comment when you are done.
 def get_feedback_colors(secret_word, guessed_word):
     """
     Processes the guess and generates the colored feedback based on the potential secret word. This
@@ -380,8 +374,7 @@ def get_feedback_colors(secret_word, guessed_word):
             secret_list[i] = None
 
     for i in range(NUM_LETTERS):
-        feedback[i] = WRONG_SPOT_COLOR
-        if guessed_word[i] in secret_list:
+        if guessed_word[i] in secret_list and feedback[i] == NOT_IN_WORD_COLOR:
             feedback[i] = WRONG_SPOT_COLOR
             secret_list[secret_list.index(guessed_word[i])] = None
 
