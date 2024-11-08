@@ -194,7 +194,7 @@ class WordFamily:
         if not isinstance(other, WordFamily):
             raise NotImplementedError("< operator only valid for WordFamily comparisons.")
         if len(self.words) != len(other.words):
-            return len(self.words) < len(other.words)
+            return len(self.words) > len(other.words)
         if self.difficulty != other.difficulty:
             return self.difficulty < other.difficulty
         return tuple(self.feedback_colors) < tuple(other.feedback_colors)
@@ -420,8 +420,7 @@ def get_feedback(remaining_secret_words, guessed_word):
     min_dif = float('inf')
     dif = 0
 
-    for feedback in family:
-        words = family[feedback]
+    for feedback, words in family.items():
         size = len(words)
         dif = 0
         for color in feedback:
