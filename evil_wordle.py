@@ -129,10 +129,9 @@ class Keyboard:
             elif i == 1:
                 form_row = ' '
             else: 
-                form_row = '  '
-            form_row = ' ' * 1
+                form_row = '   '
             form_row +=  ' '.join(color_word(self.colors[let], let) for let in row)
-            new_list.append(form_row.strip())
+            new_list.append(form_row)
         return '\n'.join(new_list)
 
 class WordFamily:
@@ -195,7 +194,7 @@ class WordFamily:
         if not isinstance(other, WordFamily):
             raise NotImplementedError("< operator only valid for WordFamily comparisons.")
         if len(self.words) != len(other.words):
-            return len(self.words) < len(other.words)
+            return len(self.words) > len(other.words)
         if self.difficulty != other.difficulty:
             return self.difficulty < other.difficulty
         return tuple(self.feedback_colors) < tuple(other.feedback_colors)
@@ -345,14 +344,18 @@ def fast_sort(lst):
     left = fast_sort(lst[:mid])
 
     new_list = []
-    while right and left:
-        if right[0] > left[0]:
-            new_list.append(left.pop(0))
+    i = 0
+    j = 0
+    while j < len(right) and i < len(left):
+        if left[i] < right[j]:
+            new_list.append(left[i])
+            i += 1
         else:
-            new_list.append(right.pop(0))
+            new_list.append(right[j])
+            j += 1
 
-    new_list.extend(left)
-    new_list.extend(right)
+    new_list.extend(left[i:])
+    new_list.extend(right[j:])
     return new_list
 
 def get_feedback_colors(secret_word, guessed_word):
@@ -414,24 +417,25 @@ def get_feedback(remaining_secret_words, guessed_word):
     hard = None
     hard_word = []
     max_size = 0
-    min_dif = 0
+    min_dif = -1000
     dif = 0
 
     for feedback in family:
         words = family[feedback]
         size = len(words)
+        dif = 0
         for color in feedback:
             if color == WRONG_SPOT_COLOR:
                 dif += 1
             elif color == NOT_IN_WORD_COLOR:
                 dif += 2
     
-    if (size > max_size or (size == max_size and dif < min_dif) or 
-       (size == max_size and dif == min_dif and feedback < hard)):
-        hard = feedback
-        hard_word = words
-        max_size = size
-        min_dif = dif
+        if (size > max_size or (size == max_size and dif < min_dif) or 
+            (size == max_size and dif == min_dif and feedback < hard)):
+            hard = feedback
+            hard_word = words
+            max_size = size
+            min_dif = dif
     feedback_colors = list(hard)
 
     return feedback_colors, hard
